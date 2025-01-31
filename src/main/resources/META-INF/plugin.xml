@@ -6,9 +6,13 @@
 
     <depends>com.intellij.modules.platform</depends>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <runConfigurationType implementation="com.github.karu9.denotests.DenoTestRunConfigurationType"/>
+    </extensions>
+
     <actions>
-        <action id="com.example.deno.RunDenoTestAction"
-                class="com.example.deno.RunDenoTestAction"
+        <action id="com.github.karu9.denotests.RunDenoTestAction"
+                class="com.github.karu9.denotests.RunDenoTestAction"
                 text="Run Deno Test"
                 description="Run a specific Deno test">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>

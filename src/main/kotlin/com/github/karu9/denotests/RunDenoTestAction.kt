@@ -1,4 +1,4 @@
-package com.example.deno
+package com.example.deno.com.github.karu9.denotests
 
 import com.intellij.execution.RunManager
 import com.intellij.execution.RunnerAndConfigurationSettings
@@ -8,6 +8,7 @@ import com.intellij.execution.runners.ExecutionEnvironmentBuilder
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
 
 class RunDenoTestAction : AnAction("Run Deno Test") {
     override fun actionPerformed(e: AnActionEvent) {
@@ -17,7 +18,9 @@ class RunDenoTestAction : AnAction("Run Deno Test") {
 
         val caretModel = editor.caretModel
         val lineNumber = caretModel.logicalPosition.line
-        val lineText = document.getText(document.getLineStartOffset(lineNumber)..document.getLineEndOffset(lineNumber))
+        val lineText = document.getText(
+            TextRange(document.getLineStartOffset(lineNumber), document.getLineEndOffset(lineNumber))
+        )
 
         // Extract the test name from `Deno.test("test name")`
         val testNameRegex = "Deno\\.test\\([\"'](.+?)[\"']".toRegex()
@@ -41,7 +44,8 @@ class RunDenoTestAction : AnAction("Run Deno Test") {
 
             val executor = DefaultRunExecutor.getRunExecutorInstance()
             val environment = ExecutionEnvironmentBuilder.create(executor, it).build()
-            ProgramRunner.getRunner(DefaultRunExecutor.EXECUTOR_ID, environment)?.execute(environment)
+            val runProfile = environment.runProfile  // ✅ Extract RunProfile from ExecutionEnvironment
+            ProgramRunner.getRunner(DefaultRunExecutor.EXECUTOR_ID, runProfile)?.execute(environment)
         }
     }
 }
